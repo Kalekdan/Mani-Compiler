@@ -1,0 +1,39 @@
+println """
+*******************************************
+ You are building Mani! 
+ Output files will be in /build/libs
+*******************************************
+"""
+group 'Mani'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'Main'
+
+sourceSets.main.java.srcDirs = ['src']
+
+sourceCompatibility = 1.8
+
+ext.buildNumber = System.getenv("BUILD_NUMBER") ?: "dev"
+version 'Stable'
+
+task start(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "com.mani.compiler.Main"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.mani.compiler.Main'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
